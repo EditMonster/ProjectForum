@@ -9,19 +9,27 @@
     android:fitsSystemWindows="true"
     tools:context=".PostActivity">
 
-
-
-    <!--android:layout_margin="10dp"-->
-    <EditText
-        android:id="@+id/editText"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:maxLength="200"
+        android:gravity="center"
         android:background="#03A9F4"
-        android:ems="10"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        android:padding="10dp" />
+        app:counterEnabled="true"
+        app:counterMaxLength="200">
+
+        <!--android:layout_margin="10dp"-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="200"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:padding="10dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Spinner
         android:id="@+id/spinner"
@@ -37,6 +45,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:clickable="true"
+        android:focusable="true"
         app:srcCompat="@android:drawable/ic_menu_send" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
