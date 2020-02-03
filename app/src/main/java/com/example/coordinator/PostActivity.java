@@ -1,7 +1,9 @@
 package com.example.coordinator;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -10,8 +12,13 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class PostActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
@@ -23,9 +30,12 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         initFirestore();
+        getSupportActionBar().setTitle("Post");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         tag = getResources().getStringArray(R.array.sport_types)[0];
         initSpinner();
-        Button button_post = findViewById(R.id.button_confirm_post);
+        FloatingActionButton button_post = findViewById(R.id.button_send_post);
         button_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +71,9 @@ public class PostActivity extends AppCompatActivity {
         EditText editText = findViewById(R.id.editText);
         String text = editText.getText().toString();
         CollectionReference posts = firestore.collection("Posts");
-        posts.add(new Post(text, tag));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String date = sdf.format(new Date());
+        posts.add(new Post(text, tag, date));
+        finish();
     }
 }

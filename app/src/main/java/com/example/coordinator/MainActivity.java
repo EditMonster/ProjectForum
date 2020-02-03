@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -29,17 +31,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
-    private ArrayList<Post> posts = new ArrayList<>();;
     private FloatingActionButton button_post;
+    private Query query;
+    PostAdapter adapter;
     private RecyclerView recyclerView;
     final int LIMIT = 50;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +43,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        signInAnonymously();
+        if (mAuth.getCurrentUser() == null) {
+            Log.d("jee", "jaa");
+            signInAnonymously();
+        }
         initFirestore();
-        Firestore
-        recyclerView = findViewById(R.id.recycler_view);
-        MyAdapter myAdapter = new MyAdapter(this, firestore);
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setUpPostAdapter();
         button_post = findViewById(R.id.button_floating_post);
         button_post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFirestore() {
+
         firestore = FirebaseFirestore.getInstance();
+        query = firestore.collection("Posts")
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(LIMIT);
     }
 
     private void startPost() {
@@ -93,5 +92,26 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void setUpPostAdapter() {
+        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
+                .setQuery(query, Post.class).build();
+        adapter = new PostAdapter(options);
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
