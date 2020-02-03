@@ -1,5 +1,6 @@
 package com.example.coordinator;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,10 +72,22 @@ public class PostActivity extends AppCompatActivity {
     private void makePost() {
         EditText editText = findViewById(R.id.editText);
         String text = editText.getText().toString();
-        CollectionReference posts = firestore.collection("Posts");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-        String date = sdf.format(new Date());
-        posts.add(new Post(text, tag, date));
-        finish();
+        if (text.length() > 0 ) {
+            CollectionReference posts = firestore.collection("Posts");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    Locale.getDefault());
+            String date = sdf.format(new Date());
+            posts.add(new Post(text, tag, date));
+            makeToastMessage("Send");
+            finish();
+        }
+        else makeToastMessage("Textfield is empty.");
+    }
+
+    private void makeToastMessage(CharSequence show) {
+        int duration = Toast.LENGTH_SHORT;
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context, show, duration);
+        toast.show();
     }
 }
