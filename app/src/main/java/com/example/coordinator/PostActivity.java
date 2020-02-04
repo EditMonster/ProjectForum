@@ -95,7 +95,10 @@ public class PostActivity extends AppCompatActivity {
                 finish();
             } else makeToastMessage("Textfield is empty");
         }
-        else makeToastMessage("Choose category");
+        else {
+            makeToastMessage("Choose category");
+            spinner.performClick();
+        }
     }
 
     private void makeToastMessage(CharSequence show) {

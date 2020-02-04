@@ -9,7 +9,7 @@ public class Post {
     private String text;
     private String tag;
     private String date;
-    ArrayList<Comment> comments;
+    private ArrayList<Comment> comments;
 
     public Post() {
         //for firestore
@@ -26,16 +26,29 @@ public class Post {
         this.comments = comments;
     }
 
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getTag() {
         return tag;
     }
 
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public String getDate() {
         return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public ArrayList<Comment> getComments() {
@@ -46,7 +59,11 @@ public class Post {
         this.comments = comments;
     }
 
-    public boolean isComment() {
-        return comments != null;
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
+    public int commentCount() {
+        return comments.size();
     }
 }

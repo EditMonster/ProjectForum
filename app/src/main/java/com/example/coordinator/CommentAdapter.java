@@ -61,8 +61,4 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             text = itemView.findViewById(R.id.text_view_comment);
         }
     }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-    }
 }

@@ -91,9 +91,9 @@ public class CommentActivity extends AppCompatActivity {
                     Locale.getDefault());
             String date = sdf.format(new Date());
             Comment comment = new Comment(text, date);
-            adapter.addComment(comment);
+            post.addComment(comment);
             editText_comment.setText("");
-            docRef.update("comments", post.comments);
+            docRef.update("comments", post.getComments());
         }
         else makeToastMessage("Write a comment");
     }
