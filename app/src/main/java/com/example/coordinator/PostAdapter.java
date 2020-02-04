@@ -27,6 +27,8 @@ public class PostAdapter extends FirestoreRecyclerAdapter<Post, PostAdapter.Post
     protected void onBindViewHolder(@NonNull PostHolder holder, int position, @NonNull Post model) {
         holder.tag.setText(model.getTag());
         holder.text.setText(model.getText());
+        String time = model.getDate().substring(9, 11) + '.' + model.getDate().substring(11, 13);
+        holder.time.setText(time);
     }
 
     @NonNull
@@ -39,12 +41,14 @@ public class PostAdapter extends FirestoreRecyclerAdapter<Post, PostAdapter.Post
     public class PostHolder extends RecyclerView.ViewHolder {
         TextView tag;
         TextView text;
+        TextView time;
 
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
             tag = itemView.findViewById(R.id.text_view_tag);
             text = itemView.findViewById(R.id.text_view_text);
+            time = itemView.findViewById(R.id.text_view_time);
         }
     }
 }
