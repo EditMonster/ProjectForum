@@ -1,46 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:windowSoftInputMode="adjustResize"
-    android:fitsSystemWindows="true"
-    tools:context=".PostActivity">
+    tools:context=".CommentActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_comments"
+        android:layout_width="match_parent"
+        android:layout_height="660dp"
+        android:layout_gravity="top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:background="#03A9F4"
+        android:layout_gravity="bottom"
         app:counterEnabled="true"
         app:counterMaxLength="200">
 
         <!--android:layout_margin="10dp"-->
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
+            android:id="@+id/editText_comment"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:maxLength="200"
             android:background="#FFFFFF"
             android:ems="10"
             android:inputType="textMultiLine"
+            android:hint="@string/hint_comment"
             android:padding="10dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:tooltipText=""
-        android:layout_margin="40dp"></Spinner>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_send_post"
+        android:id="@+id/button_send_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

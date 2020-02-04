@@ -6,12 +6,18 @@
     <string name="choose_sport">Check chosen category and Post</string>
     <string name="confirm">Post</string>
     <string name="cancel">Cancel</string>
+    <string name="comment_text">Comments:</string>
+    <string name="hint_comment">Write a comment</string>
     <string-array name="sport_types">
+        <item>Choose category</item>
         <item>Frisbeegolf</item>
         <item>Tennis</item>
         <item>Jääkiekko</item>
         <item>Hiihto</item>
         <item>Pyöräily</item>
         <item>Uinti</item>
+    </string-array>
+    <string-array name="spinner_choose_category">
+        <item>Choose category</item>
     </string-array>
 </resources>

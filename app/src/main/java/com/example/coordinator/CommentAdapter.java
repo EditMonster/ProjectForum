@@ -17,56 +17,52 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHolder> {
     private Context context;
-    private FirebaseFirestore firestore;
-    private ArrayList<Post> posts;
+    private List<Comment> comments;
 
-    public MyAdapter(Context context, FirebaseFirestore firestore) {
+    public CommentAdapter(Context context, List<Comment> comments) {
         this.context = context;
-        this.firestore = firestore;
-        this.posts = new ArrayList<>();
-        firestore.collection("Posts").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    Post post = documentSnapshot.toObject(Post.class);
-                    posts.add(post);
-                }
-            }
-        });
+        this.comments = comments;
     }
-
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.card_view, parent, false);
+        View view = layoutInflater.inflate(R.layout.card_comment, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Post post = posts.get(position);
-        holder.tag.setText(post.getTag());
-        holder.text.setText(post.getText());
+        Comment comment = comments.get(position);
+        String date = comment.getDate();
+        if (date != null) {
+            String time = date.substring(9, 11) + '.' + date.substring(11, 13);
+            holder.time.setText(time);
+        }
+        holder.text.setText(comment.getText());
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return comments.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tag;
+        TextView time;
         TextView text;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tag = itemView.findViewById(R.id.text_view_tag);
-            text = itemView.findViewById(R.id.text_view_text);
+            time = itemView.findViewById(R.id.text_view_comment_time);
+            text = itemView.findViewById(R.id.text_view_comment);
         }
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 }

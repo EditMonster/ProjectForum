@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,7 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PostAdapter.OnCardClickListener {
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
     private FloatingActionButton button_post;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
-            Log.d("jee", "jaa");
             signInAnonymously();
         }
         initFirestore();
@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFirestore() {
-
         firestore = FirebaseFirestore.getInstance();
         query = firestore.collection("Posts")
                 .orderBy("date", Query.Direction.DESCENDING)
@@ -94,10 +93,17 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onCardClick(DocumentSnapshot documentSnapshot) {
+        Intent intent = new Intent(this, CommentActivity.class);
+        intent.putExtra("document_id", documentSnapshot.getId());
+        startActivity(intent);
+    }
+
     private void setUpPostAdapter() {
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query, Post.class).build();
-        adapter = new PostAdapter(options);
+        adapter = new PostAdapter(options, this);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
