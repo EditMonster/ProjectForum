@@ -33,7 +33,8 @@ public class PostAdapter extends FirestoreRecyclerAdapter<Post, PostAdapter.Post
         if (date != null) {
             String time = date.substring(9, 11) + '.' + date.substring(11, 13);
             holder.time.setText(time);
-            holder.commentCoumt.setText("" + model.commentCount());
+            String count = "" + model.commentCount();
+            holder.commentCoumt.setText(count);
         }
     }
 

@@ -1,8 +1,5 @@
 package com.example.coordinator;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 
 public class Post {

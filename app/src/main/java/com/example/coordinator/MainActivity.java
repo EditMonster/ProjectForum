@@ -4,17 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
@@ -23,19 +20,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements PostAdapter.OnCardClickListener {
     private FirebaseAuth mAuth;
-    private FirebaseFirestore firestore;
-    private FloatingActionButton button_post;
     private Query query;
     PostAdapter adapter;
-    private RecyclerView recyclerView;
     final int LIMIT = 50;
 
     @Override
@@ -47,9 +36,13 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
         if (mAuth.getCurrentUser() == null) {
             signInAnonymously();
         }
+        else initCaller();
+    }
+
+    private void initCaller() {
         initFirestore();
         setUpPostAdapter();
-        button_post = findViewById(R.id.button_floating_post);
+        FloatingActionButton button_post = findViewById(R.id.button_floating_post);
         button_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     }
 
     private void initFirestore() {
-        firestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         query = firestore.collection("Posts")
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(LIMIT);
@@ -104,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query, Post.class).build();
         adapter = new PostAdapter(options, this);
-        recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
@@ -112,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        if (mAuth.getCurrentUser() != null) {
+            adapter.startListening();
+        }
     }
 
     @Override
