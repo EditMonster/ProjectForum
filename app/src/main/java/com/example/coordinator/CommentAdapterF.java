@@ -25,8 +25,11 @@ public class CommentAdapterF extends FirestoreRecyclerAdapter<Comment, CommentAd
     @Override
     protected void onBindViewHolder(@NonNull CommentHolder holder, int position, @NonNull Comment model) {
         holder.text.setText(model.getText());
-        String time = model.getDate().substring(9, 11) + '.' + model.getDate().substring(11, 13);
-        holder.time.setText(time);
+        String date = model.getDate();
+        if (date != null) {
+            String time = model.getDate().substring(9, 11) + '.' + model.getDate().substring(11, 13);
+            holder.time.setText(time);
+        }
     }
 
     @NonNull
@@ -40,11 +43,10 @@ public class CommentAdapterF extends FirestoreRecyclerAdapter<Comment, CommentAd
         TextView text;
         TextView time;
 
-
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
-            text = itemView.findViewById(R.id.text_view_text);
-            time = itemView.findViewById(R.id.text_view_time);
+            text = itemView.findViewById(R.id.text_view_comment);
+            time = itemView.findViewById(R.id.text_view_comment_time);
         }
     }
 }

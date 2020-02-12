@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     private FirebaseAuth mAuth;
     private Query query;
     PostAdapter adapter;
-    final int LIMIT = 50;
+    private final int LIMIT = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,28 +1,21 @@
 package com.example.coordinator;
 
-import java.util.ArrayList;
-
 public class Post {
     private String text;
     private String tag;
     private String date;
-    private ArrayList<Comment> comments;
+    private int commentCount;
 
     public Post() {
         //for firestore
     }
 
-    public Post(String text, String tag, String date, ArrayList<Comment> comments) {
+    public Post(String text, String tag, String date) {
         this.text = text;
         this.tag = tag;
         this.date = date;
-        this.comments = comments;
+        this.commentCount = 0;
     }
-
-    public Post(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-
 
     public String getText() {
         return text;
@@ -48,19 +41,12 @@ public class Post {
         this.date = date;
     }
 
-    public ArrayList<Comment> getComments() {
-        return comments;
+
+    public int getCommentCount() {
+        return commentCount;
     }
 
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-    }
-
-    public int commentCount() {
-        return comments.size();
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 }

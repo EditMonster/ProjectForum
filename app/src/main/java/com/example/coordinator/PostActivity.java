@@ -15,7 +15,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -76,7 +75,8 @@ public class PostActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss",
                         Locale.getDefault());
                 String date = sdf.format(new Date());
-                posts.add(new Post(text, tag, date, new ArrayList<Comment>()));
+                Post post = new Post(text, tag, date);
+                posts.add(post);
                 makeToastMessage("Send");
                 finish();
             } else makeToastMessage("Textfield is empty");

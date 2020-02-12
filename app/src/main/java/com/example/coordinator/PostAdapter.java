@@ -33,7 +33,7 @@ public class PostAdapter extends FirestoreRecyclerAdapter<Post, PostAdapter.Post
         if (date != null) {
             String time = date.substring(9, 11) + '.' + date.substring(11, 13);
             holder.time.setText(time);
-            String count = "" + model.commentCount();
+            String count = "" + model.getCommentCount();
             holder.commentCoumt.setText(count);
         }
     }
@@ -44,7 +44,6 @@ public class PostAdapter extends FirestoreRecyclerAdapter<Post, PostAdapter.Post
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view, parent, false);
         return new PostHolder(view, onCardClickListener);
     }
-
     public class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tag;
         TextView text;

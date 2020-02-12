@@ -1,6 +1,5 @@
 package com.example.coordinator;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,24 +10,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 public class CommentActivity extends AppCompatActivity {
-    private CommentAdapter adapter;
-    private DocumentReference docRef;
+    private CommentAdapterF adapter;
+    private CollectionReference colRef;
     private FirebaseFirestore firestore;
-    private RecyclerView recyclerView;
-    private Post post;
-    EditText editText_comment;
+    private Query query;
+    private final int LIMIT = 50;
+    private EditText editText_comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +35,7 @@ public class CommentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Comments");
         initFirestore();
-        loadPost();
+        setUpPostAdapter();
         editText_comment = findViewById(R.id.editText_comment);
         FloatingActionButton button = findViewById(R.id.button_send_comment);
         button.setOnClickListener(new View.OnClickListener() {
@@ -51,28 +49,21 @@ public class CommentActivity extends AppCompatActivity {
     private void initFirestore() {
         firestore = FirebaseFirestore.getInstance();
         String document_id = getIntent().getStringExtra("document_id");
-        docRef = firestore.collection("Posts").document(document_id);
-    }
-
-    private void loadPost() {
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                post = documentSnapshot.toObject(Post.class);
-                setUpPostAdapter();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-            }
-        });
+        colRef = firestore.collection("Posts").document(document_id)
+                .collection("comments");
+        query = colRef
+                .orderBy("date", Query.Direction.ASCENDING)
+                .limit(LIMIT);
     }
 
     private void setUpPostAdapter() {
-        adapter = new CommentAdapter(this, post.getComments());
-        recyclerView = findViewById(R.id.recycler_comments);
+        FirestoreRecyclerOptions<Comment> options = new FirestoreRecyclerOptions.Builder<Comment>()
+                .setQuery(query, Comment.class).build();
+        adapter = new CommentAdapterF(options);
+        RecyclerView recyclerView = findViewById(R.id.recycler_comments);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
 
     private void sendComment() {
@@ -83,9 +74,8 @@ public class CommentActivity extends AppCompatActivity {
                     Locale.getDefault());
             String date = sdf.format(new Date());
             Comment comment = new Comment(text, date);
-            post.addComment(comment);
             editText_comment.setText("");
-            docRef.update("comments", post.getComments());
+            colRef.add(comment);
         }
         else makeToastMessage("Write a comment");
     }
@@ -95,5 +85,11 @@ public class CommentActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         Toast toast = Toast.makeText(context, show, duration);
         toast.show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
