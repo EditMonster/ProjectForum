@@ -9,7 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_comments"
         android:layout_width="match_parent"
-        android:layout_height="660dp"
+        android:layout_height="640dp"
         android:layout_gravity="top"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,34 +21,31 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="#03A9F4"
+        android:gravity="start"
+        android:background="#FFFFFF"
         android:layout_gravity="bottom"
         app:counterEnabled="true"
+        android:padding="10dp"
         app:counterMaxLength="200">
 
-        <!--android:layout_margin="10dp"-->
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText_comment"
-            android:layout_width="250dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:maxLength="200"
-            android:background="#FFFFFF"
             android:ems="10"
-            android:inputType="textMultiLine"
             android:hint="@string/hint_comment"
+            android:inputType="textMultiLine"
+            android:maxLength="200"
             android:padding="10dp" />
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_send_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:srcCompat="@android:drawable/ic_menu_send" />
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="30dp"
+        app:srcCompat="@drawable/ic_message_black"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

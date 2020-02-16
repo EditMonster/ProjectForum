@@ -26,5 +26,14 @@
         android:layout_margin="25dp"
         android:src="@drawable/ic_message_black"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_floating_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="95dp"
+        android:layout_marginEnd="25dp"
+        android:src="@drawable/ic_sort_black_24dp" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

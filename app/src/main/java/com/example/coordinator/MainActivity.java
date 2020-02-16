@@ -21,10 +21,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class MainActivity extends AppCompatActivity implements PostAdapter.OnCardClickListener {
+public class MainActivity extends AppCompatActivity implements PostAdapter.OnCardClickListener, DialogCategory.GategoryListener {
+    FirebaseFirestore firestore;
     private FirebaseAuth mAuth;
     private Query query;
-    PostAdapter adapter;
+    private DialogCategory dialogCategory;
+    private PostAdapter adapter;
+    private String choosen;
     private final int LIMIT = 50;
 
     @Override
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     }
 
     private void initCaller() {
+        choosen = "Main";
         initFirestore();
         setUpPostAdapter();
         FloatingActionButton button_post = findViewById(R.id.button_floating_post);
@@ -49,10 +53,11 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
                 startPost();
             }
         });
+        setUpFloatCategory();
     }
 
     private void initFirestore() {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         query = firestore.collection("Posts")
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(LIMIT);
@@ -96,10 +101,41 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     private void setUpPostAdapter() {
         FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
                 .setQuery(query, Post.class).build();
-        adapter = new PostAdapter(options, this);
+        adapter = new PostAdapter(options, this, this);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void changeQuery() {
+        if (!choosen.equals("Main")) {
+            query = firestore.collection("Posts").whereEqualTo("tag", choosen)
+                    .orderBy("date", Query.Direction.DESCENDING)
+                    .limit(LIMIT);
+        }
+        else {
+            query = firestore.collection("Posts")
+                    .orderBy("date", Query.Direction.DESCENDING)
+                    .limit(LIMIT);
+        }
+        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
+                .setQuery(query, Post.class).build();
+        adapter.updateOptions(options);
+    }
+
+    private void setUpChooseCa() {
+        dialogCategory = new DialogCategory();
+        dialogCategory.show(getSupportFragmentManager(), "Dialog choose");
+    }
+
+    private void setUpFloatCategory() {
+        FloatingActionButton button = findViewById(R.id.button_floating_category);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUpChooseCa();
+            }
+        });
     }
 
     @Override
@@ -114,5 +150,13 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public void listenChange(String type) {
+        if (!choosen.equals(type)) {
+            choosen = type;
+            changeQuery();
+        }
     }
 }

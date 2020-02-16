@@ -5,16 +5,18 @@ public class Post {
     private String tag;
     private String date;
     private int commentCount;
+    private int color;
 
     public Post() {
         //for firestore
     }
 
-    public Post(String text, String tag, String date) {
+    public Post(String text, String tag, String date, int color) {
         this.text = text;
         this.tag = tag;
         this.date = date;
         this.commentCount = 0;
+        this.color = color;
     }
 
     public String getText() {
@@ -48,5 +50,13 @@ public class Post {
 
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 }

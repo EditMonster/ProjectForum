@@ -8,11 +8,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -24,6 +27,7 @@ public class CommentActivity extends AppCompatActivity {
     private CommentAdapterF adapter;
     private CollectionReference colRef;
     private FirebaseFirestore firestore;
+    private DocumentReference docRef;
     private Query query;
     private final int LIMIT = 50;
     private EditText editText_comment;
@@ -33,7 +37,8 @@ public class CommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Comments");
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        getSupportActionBar().setTitle(R.string.comments);
         initFirestore();
         setUpPostAdapter();
         editText_comment = findViewById(R.id.editText_comment);
@@ -49,8 +54,8 @@ public class CommentActivity extends AppCompatActivity {
     private void initFirestore() {
         firestore = FirebaseFirestore.getInstance();
         String document_id = getIntent().getStringExtra("document_id");
-        colRef = firestore.collection("Posts").document(document_id)
-                .collection("comments");
+        docRef = firestore.collection("Posts").document(document_id);
+        colRef = docRef.collection("comments");
         query = colRef
                 .orderBy("date", Query.Direction.ASCENDING)
                 .limit(LIMIT);
@@ -76,6 +81,7 @@ public class CommentActivity extends AppCompatActivity {
             Comment comment = new Comment(text, date);
             editText_comment.setText("");
             colRef.add(comment);
+            docRef.update("commentCount", FieldValue.increment(1));
         }
         else makeToastMessage("Write a comment");
     }
