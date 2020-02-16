@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
     public void onCardClick(DocumentSnapshot documentSnapshot) {
         Intent intent = new Intent(this, CommentActivity.class);
         intent.putExtra("document_id", documentSnapshot.getId());
+        if (documentSnapshot.getLong("color") != null) {
+            intent.putExtra("post_color", documentSnapshot.getLong("color").intValue());
+        }
+        else intent.putExtra("post_color", 0);
         startActivity(intent);
     }
 

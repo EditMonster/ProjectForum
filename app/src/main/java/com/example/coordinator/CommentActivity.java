@@ -1,11 +1,13 @@
 package com.example.coordinator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -61,10 +63,20 @@ public class CommentActivity extends AppCompatActivity {
                 .limit(LIMIT);
     }
 
+    private int chooseColor(int color) {
+        int retColor = ContextCompat.getColor(this, R.color.colorPost1);
+        if (color == 1) retColor = ContextCompat.getColor(this, R.color.colorPost2);
+        else if (color == 2) retColor = ContextCompat.getColor(this, R.color.colorPost3);
+        else if (color == 3) retColor = ContextCompat.getColor(this, R.color.colorPost4);
+
+        return retColor;
+    }
+
     private void setUpPostAdapter() {
         FirestoreRecyclerOptions<Comment> options = new FirestoreRecyclerOptions.Builder<Comment>()
                 .setQuery(query, Comment.class).build();
-        adapter = new CommentAdapterF(options);
+        int color = getIntent().getIntExtra("post_color", 0);
+        adapter = new CommentAdapterF(options, chooseColor(color));
         RecyclerView recyclerView = findViewById(R.id.recycler_comments);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
