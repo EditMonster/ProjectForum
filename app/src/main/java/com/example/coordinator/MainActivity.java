@@ -113,12 +113,12 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
 
     private void changeQuery() {
         if (!choosen.equals("Main")) {
-            query = firestore.collection("Posts").whereEqualTo("tag", choosen)
+            query = firestore.collection("posts17_2").whereEqualTo("tag", choosen)
                     .orderBy("date", Query.Direction.DESCENDING)
                     .limit(LIMIT);
         }
         else {
-            query = firestore.collection("Posts")
+            query = firestore.collection("posts17_2")
                     .orderBy("date", Query.Direction.DESCENDING)
                     .limit(LIMIT);
         }
