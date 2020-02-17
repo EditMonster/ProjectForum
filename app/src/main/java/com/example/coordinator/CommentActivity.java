@@ -56,7 +56,7 @@ public class CommentActivity extends AppCompatActivity {
     private void initFirestore() {
         firestore = FirebaseFirestore.getInstance();
         String document_id = getIntent().getStringExtra("document_id");
-        docRef = firestore.collection("Posts").document(document_id);
+        docRef = firestore.collection("posts17_2").document(document_id);
         colRef = docRef.collection("comments");
         query = colRef
                 .orderBy("date", Query.Direction.ASCENDING)

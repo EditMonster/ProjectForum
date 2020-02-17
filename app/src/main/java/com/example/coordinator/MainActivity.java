@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
 
     private void initFirestore() {
         firestore = FirebaseFirestore.getInstance();
-        query = firestore.collection("Posts")
+        query = firestore.collection("posts17_2")
                 .orderBy("date", Query.Direction.DESCENDING)
                 .limit(LIMIT);
     }

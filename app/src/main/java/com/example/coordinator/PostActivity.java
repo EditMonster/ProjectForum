@@ -111,7 +111,7 @@ public class PostActivity extends AppCompatActivity {
             EditText editText = findViewById(R.id.editText_post);
             String text = editText.getText().toString();
             if (text.length() > 0) {
-                CollectionReference posts = firestore.collection("Posts");
+                CollectionReference posts = firestore.collection("posts17_2");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss",
                         Locale.getDefault());
                 String date = sdf.format(new Date());
