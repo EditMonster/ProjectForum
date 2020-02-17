@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.OnCar
         if (mAuth.getCurrentUser() == null) {
             signInAnonymously();
         }
-        else initCaller();
+        initCaller();
     }
 
     private void initCaller() {
